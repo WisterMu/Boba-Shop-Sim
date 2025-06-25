@@ -40,6 +40,6 @@ public class Station : MonoBehaviour
         // Locks the player into position and rotation, enables interaction, etc.
         Debug.Log("Entering station: " + gameObject.name);
         
-        player.GetComponent<PlayerMovement>().followTarget = lockPosition; // Set the station as the follow target
+        player.GetComponentInParent<LockPlayer>().followTarget = lockPosition; // Set the station as the follow target
     }
 }
