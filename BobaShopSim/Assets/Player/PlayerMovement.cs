@@ -13,21 +13,31 @@ public class PlayerMovement : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        rb = GetComponent<Rigidbody>();
+
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
-        UnityEngine.Vector3 movement = new UnityEngine.Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-        rb.MovePosition(rb.position + movement * WalkSpeed * Time.fixedDeltaTime);
+        movement();
+    }
 
-        movement = Camera.main.transform.TransformDirection(movement);
-        movement = UnityEngine.Vector3.ProjectOnPlane(movement, UnityEngine.Vector3.up);
+    void movement()
+    {
 
-        UnityEngine.Vector3 camDir = mainCamera.transform.forward;
-        camDir = UnityEngine.Vector3.ProjectOnPlane(camDir, UnityEngine.Vector3.up);
+        //variables
+        float horizontal = Input.GetAxis("Horizontal");
+        float vertical = Input.GetAxis("Vertical");
 
-        transform.forward = camDir;
+        float movementAmount = Mathf.Abs(horizontal) + Mathf.Abs(vertical); //creates variable for combined variables
+
+        var movementInput = new UnityEngine.Vector3(horizontal, 0, vertical).normalized; //normalizes movement
+
+        var MovementDirection = mainCamera.transform.rotation * movementInput; //sets camera direction to be new forward
+
+        if (movementAmount > 0)
+        {
+            transform.position += MovementDirection * WalkSpeed * Time.deltaTime; //movement and direction changes
+        }
     }
 }
