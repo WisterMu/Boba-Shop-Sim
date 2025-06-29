@@ -242,14 +242,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5961193698858333421, guid: c86f649e589e2ed438dd1c7650eda4fa, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1.21
-      objectReference: {fileID: 0}
-    - target: {fileID: 7827062184139032791, guid: c86f649e589e2ed438dd1c7650eda4fa, type: 3}
-      propertyPath: m_Name
-      value: Capsule (pretend this is sprite)
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
