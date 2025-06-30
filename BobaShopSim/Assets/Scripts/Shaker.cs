@@ -40,6 +40,18 @@ public class Shaker : MonoBehaviour
             drink = null;
         }
     }
-    
 
+    public void OnInteract(Transform player)
+    {
+        // Grab shaker by assigning it to follow target
+        if (followTarget == null)
+        {
+            followTarget = player; // Set the player as the follow target
+        }
+        else
+        {
+            followTarget = null; // If already following, stop following
+        }
+        
+    }
 }
