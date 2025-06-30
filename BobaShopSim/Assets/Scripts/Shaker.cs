@@ -1,7 +1,9 @@
+using Unity.Mathematics;
 using UnityEngine;
 
 public class Shaker : MonoBehaviour
 {
+
     public Drink drink = null; // Reference to the Drink script
     public Transform followTarget = null; // Target to follow, if needed
 
@@ -29,7 +31,7 @@ public class Shaker : MonoBehaviour
             drink = gameObject.AddComponent<Drink>();
         }
     }
-    
+
     public void ClearDrink()
     {
         if (drink != null)
@@ -38,4 +40,6 @@ public class Shaker : MonoBehaviour
             drink = null;
         }
     }
+    
+
 }
