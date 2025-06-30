@@ -110,6 +110,9 @@ public class Menu : MonoBehaviour
         // Get recipe for the order
         List<string> order = boba_recipes[random_name];
 
+        //Automatically adding ice to the order in the 4th index - jamie added this line
+        order.Insert(4, "Ice");
+
         // Add random topping(s) to the order
         // 0 - Boba | 1 - Random | 2 - Boba, Random | 3 - No Topping
         int rand = Random.Range(0, 4);
