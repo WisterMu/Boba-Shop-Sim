@@ -116,7 +116,7 @@ public class PlayerInteract : MonoBehaviour
         // Drop the shaker if it is being held
         if (heldShaker != null)
         {
-            heldShaker.followTarget = null; // Stop following the player
+            heldShaker.OnDrop(); // Call the OnDrop method of the Shaker component
             heldShaker = null; // Reset the held shaker
             Debug.Log("Dropped the shaker.");
         }

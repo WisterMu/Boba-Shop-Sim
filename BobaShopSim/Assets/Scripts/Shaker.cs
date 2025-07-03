@@ -52,6 +52,24 @@ public class Shaker : MonoBehaviour
         {
             followTarget = null; // If already following, stop following
         }
-        
+
+    }
+    
+    public void OnDrop()
+    {
+        // To be called when the shaker is dropped (reset velocity because it goes wacky)
+
+        // Drop Shaker
+        Rigidbody rb = GetComponent<Rigidbody>();
+
+        if (followTarget != null)
+        {
+            followTarget = null; // Stop following
+            if (rb != null)
+            {
+                rb.linearVelocity = Vector3.zero; // Reset velocity
+                rb.angularVelocity = Vector3.zero; // Reset angular velocity
+            }
+        }
     }
 }
