@@ -75,6 +75,11 @@ public class PlayerInteract : MonoBehaviour
 
     public void OnInteract(InputAction.CallbackContext context)
     {
+        if (!context.performed)
+        {
+            return; // Only proceed if the action was performed
+        }
+        
         // Tracks the input event
         Debug.Log("E key pressed (Interact)");
         // Do your interaction logic here
@@ -95,12 +100,12 @@ public class PlayerInteract : MonoBehaviour
         Shaker shaker = obj.GetComponent<Shaker>();
         if (shaker != null)     // is a shaker
         {
-            shaker.OnInteract(shakerOffset); // Call the OnInteract method of the Shaker component
-            if (heldShaker == null) // If not already holding a shaker
+            if (heldShaker != null) // If not already holding a shaker
             {
-                DropShaker(); // Drop any currently held shaker
-                heldShaker = shaker; // Set the held shaker
+                DropShaker(); // Drop any currently held shaker first
             }
+            heldShaker = shaker; // Set the held shaker
+            shaker.OnInteract(shakerOffset); // Call the OnInteract method of the Shaker component
         }
     }
 

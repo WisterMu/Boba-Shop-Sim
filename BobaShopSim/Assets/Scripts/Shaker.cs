@@ -48,11 +48,6 @@ public class Shaker : MonoBehaviour
         {
             followTarget = player; // Set the player as the follow target
         }
-        else
-        {
-            followTarget = null; // If already following, stop following
-        }
-
     }
     
     public void OnDrop()
