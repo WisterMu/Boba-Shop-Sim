@@ -10,9 +10,9 @@ public class PlayerInteract : MonoBehaviour
     GameObject lookingAt = null; // Reference to the last seen outline component
     Input inputActions; // Input actions for player interaction
     [SerializeField]
-    private Transform shakerOffset; // Reference to the shaker offset
+    private Transform containerOffset; // Reference to the container offset
     [SerializeField]
-    Shaker heldShaker; // Reference to the held shaker component
+    Container heldContainer; // Reference to the held container component
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -79,7 +79,7 @@ public class PlayerInteract : MonoBehaviour
         {
             return; // Only proceed if the action was performed
         }
-        
+
         // Tracks the input event
         Debug.Log("E key pressed (Interact)");
         // Do your interaction logic here
@@ -97,15 +97,15 @@ public class PlayerInteract : MonoBehaviour
     {
         // Interaction functionality
         Debug.Log("Interacting with: " + obj.name);
-        Shaker shaker = obj.GetComponent<Shaker>();
-        if (shaker != null)     // is a shaker
+        Container container = obj.GetComponent<Container>();
+        if (container != null)     // is a container
         {
-            if (heldShaker != null) // If not already holding a shaker
+            if (heldContainer != null) // If not already holding a container
             {
-                DropShaker(); // Drop any currently held shaker first
+                DropContainer(); // Drop any currently held container first
             }
-            heldShaker = shaker; // Set the held shaker
-            shaker.OnInteract(shakerOffset); // Call the OnInteract method of the Shaker component
+            heldContainer = container; // Set the held container
+            container.OnInteract(containerOffset); // Call the OnInteract method of the Container component
         }
     }
 
@@ -113,17 +113,17 @@ public class PlayerInteract : MonoBehaviour
     {
         // Interaction functionality when nothing is selected
         Debug.Log("Interacting with air.");
-        DropShaker(); // Drop the shaker if it is being held
+        DropContainer(); // Drop the container if it is being held
     }
 
-    void DropShaker()
+    void DropContainer()
     {
-        // Drop the shaker if it is being held
-        if (heldShaker != null)
+        // Drop the container if it is being held
+        if (heldContainer != null)
         {
-            heldShaker.OnDrop(); // Call the OnDrop method of the Shaker component
-            heldShaker = null; // Reset the held shaker
-            Debug.Log("Dropped the shaker.");
+            heldContainer.OnDrop(); // Call the OnDrop method of the Container component
+            heldContainer = null; // Reset the held container
+            Debug.Log("Dropped the container.");
         }
     }
 }
