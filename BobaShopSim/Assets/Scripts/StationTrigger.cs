@@ -27,7 +27,7 @@ public class StationTrigger : MonoBehaviour
         {
             // Optionally, you can show a UI prompt or highlight the station
             Debug.Log("Player touched station: " + gameObject.name);
-            station.EnterStation(); // Call the EnterStation method on the parent station object
+            //station.EnterStation();  Call the EnterStation method on the parent station object
         }
     }
 }
