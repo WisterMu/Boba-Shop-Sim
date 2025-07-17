@@ -3,6 +3,8 @@ using UnityEngine.InputSystem;
 
 public class PlayerInteract : MonoBehaviour
 {
+    // Handles player interactions, also contains most player information/functionality (maybe refactor into separate player script?)
+    GameObject player; // Reference to the player
     public Camera playerCamera;       // Reference to camera
     public float maxDistance = 100f;  // Raycast length
     public LayerMask layerMask;       // (Optional) Layer filtering
@@ -13,11 +15,12 @@ public class PlayerInteract : MonoBehaviour
     private Transform containerOffset; // Reference to the container offset
     [SerializeField]
     Container heldContainer; // Reference to the held container component
+    Station atStation; // Reference to the station the player is currently at
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-
+        player = GameObject.FindGameObjectWithTag("Player"); // Find the player by tag
     }
 
     void Update()
@@ -62,8 +65,11 @@ public class PlayerInteract : MonoBehaviour
                 }
             }
             Outline outline = hit.collider.GetComponent<Outline>();
-            outline.ToggleOutline(true); // Enable outline on the object
-
+            if (outline != null)  // Skip if no outline component
+            {
+                outline.ToggleOutline(true); // Enable outline on the object
+            }
+            
             // // Check for input to select the object
             // if (Input.GetButtonDown("Fire1")) // Assuming "Fire1" is the interaction button
             // {
@@ -93,6 +99,28 @@ public class PlayerInteract : MonoBehaviour
         }
     }
 
+    public void OnEscape(InputAction.CallbackContext context)
+    {
+        if (!context.performed)
+        {
+            return; // Only proceed if the action was performed
+        }
+
+        // Tracks the input event
+        Debug.Log("Escape key pressed (Exit)");
+        // Exit any interaction or drop the container
+        if (atStation != null)  // Attempting to exit a station
+        {
+            atStation.ExitStation(); // Exit the station if currently at one
+            atStation = null; // Reset the station reference
+        }
+        else
+        {
+            // Not at a station, so drop the container if held
+            DropContainer(); // Drop the container if it is being held
+        }
+    }
+
     void InteractWithObject(GameObject obj)
     {
         // Interaction functionality
@@ -106,6 +134,17 @@ public class PlayerInteract : MonoBehaviour
             }
             heldContainer = container; // Set the held container
             container.OnInteract(containerOffset); // Call the OnInteract method of the Container component
+        }
+
+        Station station = obj.GetComponentInParent<Station>();
+        if (station != null) // If the object is a station
+        {
+            if (atStation != null && atStation != station) // If already at a different station (shouldn't be possible)
+            {
+                atStation.ExitStation(); // Exit the previous station
+            }
+            atStation = station; // Set the current station
+            station.EnterStation(); // Enter the station
         }
     }
 

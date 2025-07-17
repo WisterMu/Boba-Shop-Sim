@@ -3,6 +3,7 @@ using UnityEngine.UIElements;
 
 public class Station : MonoBehaviour
 {
+    // The functional part of the station, handles player interactions and station logic
     BoxCollider stationCollider; // Collider for the station
     public bool isActive = false; // Indicates if the station is active
     GameObject player; // Reference to the player
@@ -19,16 +20,18 @@ public class Station : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //detects if key is pressed and if user is already locked into station or not
-        if (Input.GetKeyDown(KeyCode.E) && player.GetComponentInParent<LockPlayer>().followTarget == null) //detects if key is pressed and user is already at station
-        {
-            EnterStation();
-        }
-        //same as above, just to exit station. 
-        else if (Input.GetKeyDown(KeyCode.Escape) && player.GetComponentInParent<LockPlayer>().followTarget == lockPosition)
-        {
-            ExitStation();
-        }
+        // Commented out because it bugs out with multiple stations
+        // Moved functionality into PlayerInteract.cs
+        // //detects if key is pressed and if user is currently at the station trigger
+        // if (Input.GetKeyDown(KeyCode.E)) //detects if key is pressed
+        // {
+        //     EnterStation();
+        // }
+        // //same as above, just to exit station. 
+        // else if (Input.GetKeyDown(KeyCode.Escape))
+        // {
+        //     ExitStation();
+        // }
     }
 
     void OnTriggerEnter(Collider other)
@@ -51,6 +54,7 @@ public class Station : MonoBehaviour
         Debug.Log("Entering station: " + gameObject.name);
 
         player.GetComponentInParent<LockPlayer>().followTarget = lockPosition; // Set the station as the follow target
+        isActive = true; // Set the station to active
     }
 
     public void ExitStation()
@@ -58,5 +62,6 @@ public class Station : MonoBehaviour
         Debug.Log("Exiting Station" + gameObject.name);
 
         player.GetComponentInParent<LockPlayer>().followTarget = null; //set target to none
+        isActive = false; // Set the station to inactive
     }
 }
