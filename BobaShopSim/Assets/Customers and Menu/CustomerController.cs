@@ -5,7 +5,7 @@ public class CustomerController : MonoBehaviour
 {
     public Transform queueTarget; // The target position for the customer to queue at
     [SerializeField]
-    float queueDistance = 1.0f; // Distance to maintain from each other in the queue
+    float queueDistance; // Distance to maintain from each other in the queue (set in the inspector)
     private List<CustomerNavAgent> customers = new List<CustomerNavAgent>();
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
