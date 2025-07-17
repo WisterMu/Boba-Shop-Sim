@@ -101,6 +101,9 @@ public class PlayerInteract : MonoBehaviour
 
     public void OnEscape(InputAction.CallbackContext context)
     {
+        // Actually now that I think about it, this should be reserved for opening the menu and not for interactions
+        // change later I guess
+        // Currently handles exiting a station or dropping a container
         if (!context.performed)
         {
             return; // Only proceed if the action was performed
