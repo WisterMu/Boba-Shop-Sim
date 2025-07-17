@@ -3,7 +3,7 @@ using UnityEngine.AI;
 
 public class CustomerNavAgent : MonoBehaviour
 {
-    public Transform target;
+    public Transform followtarget;
     Vector3 destination;
     NavMeshAgent agent = null;
     [SerializeField]
@@ -30,11 +30,29 @@ public class CustomerNavAgent : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Vector3.Distance(destination, target.position) > 1.0f)
+        if (followtarget == null)
         {
-            destination = target.position;
-            agent.destination = destination;
+            // If no follow target is set, go to destination
+            if (Vector3.Distance(destination, transform.position) > 1.0f)
+            {
+                agent.destination = destination;
+            }
+            else
+            {
+                // If close enough to destination, stop moving
+                agent.isStopped = true;
+            }
+            return;
         }
+        else
+        {
+            if (Vector3.Distance(destination, followtarget.position) > 1.0f)
+            {
+                destination = followtarget.position;
+                agent.destination = destination;
+            }
+        }
+
 
         // // If moving, reduce fatigue
         // if (agent.remainingDistance > 1f)
@@ -55,6 +73,22 @@ public class CustomerNavAgent : MonoBehaviour
         //         fatigue = 1f;
         //     }
         // }
+    }
+
+    public void SetFollowTarget(Transform newFollowTarget)
+    {
+        followtarget = newFollowTarget;
+        destination = followtarget.position;
+        agent.destination = destination;
+    }
+
+    // Set a new destination for the agent (disables following target)
+    public void SetDestination(Vector3 newDestination)
+    {
+        destination = newDestination;
+        agent.destination = destination;
+        followtarget = null; // Clear follow target
+        agent.isStopped = false; // Ensure the agent is not stopped
     }
 
     // void ChangeSpeed()
