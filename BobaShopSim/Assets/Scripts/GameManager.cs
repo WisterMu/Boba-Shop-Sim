@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -12,6 +13,8 @@ public class GameManager : MonoBehaviour
     // Menu management
     [SerializeField]
     List<Canvas> menus = new List<Canvas>(); // List of all menus in the game (set in the inspector)
+    [SerializeField]
+    Camera mainCamera; // Reference to the main camera
 
 
     // Awake is called when the script instance is being loaded
@@ -31,8 +34,26 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        // Initialize menus
-        SetActiveMenu("MainMenu"); // Set the default active menu
+        // Initialize menus based on the current scene (mostly for testing purposes, should always start on main menu normally)
+        Scene currentScene = SceneManager.GetActiveScene();
+        switch (currentScene.name)
+        {
+            case "MainMenu":
+                SetActiveMenu("MainMenu"); // Set the main menu as active
+                break;
+            case "SampleScene":
+                SetActiveMenu("None"); // Disable menus
+                break;
+            case "StationTest":
+                SetActiveMenu("None"); // Disable menus
+                break;
+            default:
+                SetActiveMenu("None"); // No active menu for other scenes
+                break;
+        }
+
+        SceneManager.activeSceneChanged += ChangedActiveScene;  // Subscribe to scene change events
+        mainCamera = Camera.main; // Get the main camera reference
     }
 
     // Update is called once per frame
@@ -41,6 +62,7 @@ public class GameManager : MonoBehaviour
 
     }
 
+    ////////////////// Menu Management //////////////////
     public void SetActiveMenu(string menuName)
     {
         // Switch between different menus
@@ -64,7 +86,7 @@ public class GameManager : MonoBehaviour
         // Debug.Log("Game started!");
 
         // Swap scene to the main game scene
-        UnityEngine.SceneManagement.SceneManager.LoadScene("SampleScene");
+        SceneManager.LoadScene("SampleScene");
         SetActiveMenu("None"); // Hide all menus when starting the game
     }
 
@@ -81,11 +103,27 @@ public class GameManager : MonoBehaviour
         Debug.Log("Loading game...");
         // Debug.Log("Game loaded!");
     }
-    
+
     public void QuitGame()
     {
         // Implement quit game logic here
         Debug.Log("Quitting game...");
         Application.Quit(); // Quit the application
+    }
+
+    ////////////////// Scene Management //////////////////
+    private void ChangedActiveScene(Scene current, Scene next)
+    {
+        string currentName = current.name;
+
+        if (currentName == null)
+        {
+            // Scene1 has been removed
+            currentName = "Replaced";
+        }
+
+        Debug.Log("Scenes: " + currentName + ", " + next.name);
+        // Gets main camera reference in the new scene
+        mainCamera = Camera.main;
     }
 }
