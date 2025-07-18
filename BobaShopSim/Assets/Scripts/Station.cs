@@ -14,6 +14,7 @@ public class Station : MonoBehaviour
     Camera mainCamera; // Reference to the main camera  
     PlayerLook playerLook; // Reference to the player look script
     LockPlayer lockPlayer; // Reference to the lock player script
+    public GameObject cursor; // Reference to the cursor GameObject
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -46,18 +47,17 @@ public class Station : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // Commented out because it bugs out with multiple stations
-        // Moved functionality into PlayerInteract.cs
-        // //detects if key is pressed and if user is currently at the station trigger
-        // if (Input.GetKeyDown(KeyCode.E)) //detects if key is pressed
-        // {
-        //     EnterStation();
-        // }
-        // //same as above, just to exit station. 
-        // else if (Input.GetKeyDown(KeyCode.Escape))
-        // {
-        //     ExitStation();
-        // }
+        if (isActive)
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            int layerMask = LayerMask.GetMask("Interactable"); // Define the layer mask for interactable objects
+            if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, layerMask))
+            {
+                Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.yellow);
+                Debug.Log("Mouse hit position: " + hit.point + " on " + hit.collider.name);
+                cursor.transform.position = hit.point; // Move the cursor to the hit point
+            }
+        }
     }
 
     void OnTriggerEnter(Collider other)

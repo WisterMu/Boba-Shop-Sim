@@ -8,6 +8,7 @@ public class PlayerLook : MonoBehaviour
     [SerializeField] Transform playerBody;
     float xRotation = 0f; //Makes sure camera doesn't spin without player
     public bool isLocked { get; private set; } = false; //Locks camera position and rotation when true
+    [SerializeField]
     Transform lockedPosition; //Position to lock camera to when isLocked is true
     [SerializeField] Vector3 cameraOffset = new Vector3(0f, 0.53f, 0f); // Reference to the camera offset
 
