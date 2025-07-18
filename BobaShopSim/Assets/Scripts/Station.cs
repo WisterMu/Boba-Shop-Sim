@@ -5,16 +5,42 @@ public class Station : MonoBehaviour
 {
     // The functional part of the station, handles player interactions and station logic
     BoxCollider stationCollider; // Collider for the station
-    public bool isActive = false; // Indicates if the station is active
+    public bool isActive { get; private set; } = false; // Indicates if the station is active
     GameObject player; // Reference to the player
     [SerializeField]
-    private Transform lockPosition; // Position to lock the player to when entering the station    
+    private Transform lockPosition; // Position to lock the player to when entering the station  
+    [SerializeField]
+    private Transform lockCamera; // Position to lock the camera to when entering the station  
+    Camera mainCamera; // Reference to the main camera  
+    PlayerLook playerLook; // Reference to the player look script
+    LockPlayer lockPlayer; // Reference to the lock player script
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player"); // Find the player by tag
+        if (player == null)
+        {
+            Debug.LogError("Player not found! Make sure the player has the 'Player' tag.");
+        }
+        mainCamera = Camera.main; // Get the main camera
+        if (mainCamera == null)
+        {
+            Debug.LogError("Main camera not found! Make sure there is a camera tagged as 'MainCamera'.");
+        }
+
+        playerLook = mainCamera.GetComponent<PlayerLook>(); // Get the player look script from the camera
+        if (playerLook == null)
+        {
+            Debug.LogError("PlayerLook script not found on the main camera!");
+        }
+
+        lockPlayer = player.GetComponentInParent<LockPlayer>(); // Get the lock player script from the player
+        if (lockPlayer == null)
+        {
+            Debug.LogError("LockPlayer script not found on the player!");
+        }
     }
 
     // Update is called once per frame
@@ -53,7 +79,8 @@ public class Station : MonoBehaviour
 
         Debug.Log("Entering station: " + gameObject.name);
 
-        player.GetComponentInParent<LockPlayer>().followTarget = lockPosition; // Set the station as the follow target
+        lockPlayer.LockPosition(lockPosition); // Set the station as the follow target
+        playerLook.LockCamera(lockCamera); // Lock the camera to the station's position;
         isActive = true; // Set the station to active
     }
 
@@ -61,7 +88,8 @@ public class Station : MonoBehaviour
     {
         Debug.Log("Exiting Station" + gameObject.name);
 
-        player.GetComponentInParent<LockPlayer>().followTarget = null; //set target to none
+        lockPlayer.UnlockPosition(); //set target to none
+        playerLook.UnlockCamera(); // Lock the camera to the station's position;
         isActive = false; // Set the station to inactive
     }
 }

@@ -3,7 +3,8 @@ using UnityEngine;
 public class LockPlayer : MonoBehaviour
 {
     // Locks the player in position and rotation when entering a station or similar scenario
-    public Transform followTarget = null; // Target to follow, if needed
+    private Transform followTarget = null; // Target to follow, if needed
+    public bool isLocked { get; private set; } = false; // Indicates if the player is locked in position
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -20,6 +21,21 @@ public class LockPlayer : MonoBehaviour
             transform.position = followTarget.position;
             transform.rotation = followTarget.rotation;
         }
+    }
+
+    // Method to set the follow target
+    public void LockPosition(Transform target)
+    {
+        followTarget = target; // Set the follow target to the provided transform
+        transform.position = followTarget.position; // Immediately set the player position
+        transform.rotation = followTarget.rotation; // Immediately set the player rotation
+        isLocked = true; // Set the lock state to true
+    }
+
+    public void UnlockPosition()
+    {
+        followTarget = null; // Clear the follow target
+        isLocked = false; // Set the lock state to false
     }
     
     void OnDrawGizmos()
