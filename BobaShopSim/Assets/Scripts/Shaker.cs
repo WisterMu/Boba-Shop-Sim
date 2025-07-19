@@ -8,9 +8,9 @@ public class Shaker : Container
     // It can create and clear a drink instance
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    new void Start()
     {
-
+        base.Start();
     }
 
     // Update is called once per frame

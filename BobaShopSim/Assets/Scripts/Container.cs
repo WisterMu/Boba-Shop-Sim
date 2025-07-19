@@ -5,31 +5,44 @@ public class Container : MonoBehaviour
     // Base class for containers like Shaker and Cup
     public Drink drink = null; // Reference to the Drink script
     public Transform followTarget = null; // Target to follow, if needed
+    Rigidbody rb;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    protected virtual void Start()
     {
-
+        rb = GetComponentInParent<Rigidbody>(); // Get the Rigidbody component attached to the container
+        if (rb == null)
+        {
+            Debug.LogError("Rigidbody not found on the container! Make sure the container has a Rigidbody component.");
+        }
     }
 
     // Update is called once per frame
-    public void Update()
+    protected virtual void Update()
     {
         if (followTarget != null)
         {
             // Follow the target's position
             transform.position = followTarget.position;
             transform.rotation = followTarget.rotation;
+
+            // Disable physics interactions while following
+            rb.isKinematic = true;
+        }
+        else
+        {
+            // Re-enable physics interactions when not following
+            rb.isKinematic = false;
         }
     }
     
-    public void OnInteract(Transform player)
+    public void OnInteract(Transform target)
     {
         Debug.Log("Interacting with container: " + gameObject.name);
         // Grab container by assigning it to follow target
         if (followTarget == null)
         {
-            followTarget = player; // Set the player as the follow target
+            followTarget = target; // Set the target transform as the follow target
         }
     }
     
@@ -41,12 +54,8 @@ public class Container : MonoBehaviour
         if (followTarget != null)
         {
             followTarget = null; // Stop following
-            Rigidbody rb = GetComponent<Rigidbody>();
-            if (rb != null)
-            {
-                rb.linearVelocity = Vector3.zero; // Reset velocity
-                rb.angularVelocity = Vector3.zero; // Reset angular velocity
-            }
+            rb.linearVelocity = Vector3.zero; // Reset velocity
+            rb.angularVelocity = Vector3.zero; // Reset angular velocity
         }
     }
 }

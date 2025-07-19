@@ -6,9 +6,9 @@ public class Cup : Container
     // Inherits from Container to use the drink and followTarget properties
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    new void Start()
     {
-        
+        base.Start(); // Call the base class Update method to handle following target
     }
 
     // Update is called once per frame

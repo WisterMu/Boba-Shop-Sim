@@ -14,7 +14,7 @@ public class PlayerInteract : MonoBehaviour
     [SerializeField]
     private Transform containerOffset; // Reference to the container offset
     [SerializeField]
-    Container heldContainer; // Reference to the held container component
+    public Container heldContainer; // Reference to the held container component
     Station atStation; // Reference to the station the player is currently at
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -135,8 +135,8 @@ public class PlayerInteract : MonoBehaviour
             {
                 DropContainer(); // Drop any currently held container first
             }
-            heldContainer = container; // Set the held container
-            container.OnInteract(containerOffset); // Call the OnInteract method of the Container component
+            GrabContainer(container); // Grab the container
+            return; // Exit the method after grabbing the container
         }
 
         Station station = obj.GetComponentInParent<Station>();
@@ -158,7 +158,22 @@ public class PlayerInteract : MonoBehaviour
         DropContainer(); // Drop the container if it is being held
     }
 
-    void DropContainer()
+    public void GrabContainer(Container container)
+    {
+        // Grab a container and set it as the held container
+        if (heldContainer == null) // If not already holding a container
+        {
+            heldContainer = container; // Set the held container
+            container.OnInteract(containerOffset); // Call the OnInteract method of the Container component
+            Debug.Log("Grabbed container: " + container.name);
+        }
+        else
+        {
+            Debug.LogWarning("Already holding a container, cannot grab another.");
+        }
+    }
+
+    public void DropContainer()
     {
         // Drop the container if it is being held
         if (heldContainer != null)
