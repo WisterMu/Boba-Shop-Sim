@@ -37,7 +37,7 @@ public class AudioManager : MonoBehaviour
 
         audioSource = GetComponent<AudioSource>();
         // Set audio source to contain sound clip
-        audioSource.clip = Resources.Load<AudioClip>("Audio/jixaw-metal-pipe-falling-sound"); // Load your audio clip from Resources
+        audioSource.clip = Resources.Load<AudioClip>("Audio/bubble pop"); // Load your audio clip from Resources
     }
 
     // Update is called once per frame
